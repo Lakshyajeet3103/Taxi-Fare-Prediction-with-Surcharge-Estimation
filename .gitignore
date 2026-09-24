@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+# Raw TLC data is large (~57 MB/month); download it (see README).
+data/raw/*
+!data/raw/.gitkeep
+# figures/ and results/ are versioned so the README's numbers can be checked against them.

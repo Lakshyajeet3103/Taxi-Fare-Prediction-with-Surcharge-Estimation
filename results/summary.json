@@ -1,0 +1,248 @@
+{
+  "data_source": "Official NYC Taxi & Limousine Commission Yellow Taxi Trip Record Data",
+  "files": [
+    "yellow_tripdata_2025-01.parquet"
+  ],
+  "source_rows": 3475226,
+  "source_rows_per_file": {
+    "yellow_tripdata_2025-01.parquet": 3475226
+  },
+  "sampled_rows_per_file": {
+    "yellow_tripdata_2025-01.parquet": 300000
+  },
+  "sampled_rows": 300000,
+  "final_rows": 278539,
+  "config": {
+    "random_state": 42,
+    "sample_size": 300000,
+    "test_size": 0.2,
+    "cv_folds": 5,
+    "max_fare": 500.0,
+    "max_distance_mi": 100.0,
+    "max_duration_min": 180.0,
+    "max_speed_mph": 80.0,
+    "max_passengers": 6
+  },
+  "null_metadata_subset_in_sample": {
+    "columns": [
+      "passenger_count",
+      "RatecodeID",
+      "store_and_fwd_flag",
+      "congestion_surcharge",
+      "Airport_fee"
+    ],
+    "rows_any_null": 46508,
+    "rows_all_null": 46508,
+    "share_all_null": 0.15502666666666667,
+    "payment_type_counts_in_subset": {
+      "0": 46508
+    }
+  },
+  "null_metadata_rows_after_cleaning": 35584,
+  "cleaning_log": {
+    "initial_rows": 300000,
+    "invalid_timestamps_removed": 0,
+    "pickup_outside_source_month_removed": 1,
+    "nonpositive_duration_removed": 157,
+    "duration_above_180_min_removed": 129,
+    "nonpositive_distance_removed": 7690,
+    "distance_above_100_mi_removed": 15,
+    "nonpositive_fare_removed": 11403,
+    "fare_above_500_removed": 0,
+    "passenger_count_nonpositive_removed": 2005,
+    "passenger_count_above_6_removed": 0,
+    "speed_above_80_mph_removed": 61,
+    "final_rows": 278539
+  },
+  "split": {
+    "train_rows": 222831,
+    "test_rows": 55708
+  },
+  "fare_model": {
+    "features": [
+      "trip_distance",
+      "trip_duration_min",
+      "passenger_count",
+      "avg_speed_mph",
+      "pickup_hour",
+      "day_of_week",
+      "is_weekend",
+      "is_rush_hour",
+      "log_trip_distance",
+      "metadata_missing"
+    ],
+    "cv_results": [
+      {
+        "Model": "Mean Baseline",
+        "CV_MAE": 10.32922,
+        "CV_RMSE": 16.247183,
+        "CV_RMSE_std": 0.407823,
+        "CV_R2": -4.6e-05
+      },
+      {
+        "Model": "Linear Regression",
+        "CV_MAE": 1.99082,
+        "CV_RMSE": 5.290648,
+        "CV_RMSE_std": 0.226997,
+        "CV_R2": 0.893983
+      },
+      {
+        "Model": "Ridge",
+        "CV_MAE": 1.990793,
+        "CV_RMSE": 5.290647,
+        "CV_RMSE_std": 0.22701,
+        "CV_R2": 0.893983
+      },
+      {
+        "Model": "Random Forest",
+        "CV_MAE": 1.328711,
+        "CV_RMSE": 4.431361,
+        "CV_RMSE_std": 0.131427,
+        "CV_R2": 0.925577
+      },
+      {
+        "Model": "HistGradientBoosting",
+        "CV_MAE": 1.341819,
+        "CV_RMSE": 4.515401,
+        "CV_RMSE_std": 0.180157,
+        "CV_R2": 0.922693
+      },
+      {
+        "Model": "Tuned HistGradientBoosting",
+        "CV_MAE": 1.342695,
+        "CV_RMSE": 4.514472,
+        "CV_RMSE_std": 0.183309,
+        "CV_R2": 0.922726
+      }
+    ],
+    "selected_model": "Random Forest",
+    "selection_criterion": "lowest mean 5-fold CV RMSE on training split",
+    "baseline_cv_rmse": 16.247183238602183,
+    "selected_cv_rmse": 4.43136094871919,
+    "cv_improvement_over_baseline_percent": 72.7253587059289,
+    "tuned_hist_params": {
+      "model__l2_regularization": 0.0,
+      "model__learning_rate": 0.08,
+      "model__max_iter": 100,
+      "model__max_leaf_nodes": 31
+    },
+    "test_metrics": {
+      "MAE": 1.3050877036760555,
+      "RMSE": 4.174851787897891,
+      "R2": 0.9331302982473979
+    }
+  },
+  "surcharge_model": {
+    "target_components": [
+      "extra",
+      "mta_tax",
+      "improvement_surcharge",
+      "congestion_surcharge",
+      "Airport_fee",
+      "cbd_congestion_fee"
+    ],
+    "features": [
+      "trip_distance",
+      "trip_duration_min",
+      "passenger_count",
+      "avg_speed_mph",
+      "pickup_hour",
+      "day_of_week",
+      "is_weekend",
+      "is_rush_hour"
+    ],
+    "train_rows": 194361,
+    "test_rows": 48594,
+    "excluded_null_metadata_rows": {
+      "train": 28470,
+      "test": 7114
+    },
+    "cv_metrics": {
+      "CV_MAE": 1.0513609584507573,
+      "CV_RMSE": 1.6375461223822019,
+      "CV_RMSE_std": 0.006122451444470015,
+      "CV_R2": 0.45901557426464035
+    },
+    "test_metrics": {
+      "MAE": 1.047052811588299,
+      "RMSE": 1.6401691659520319,
+      "R2": 0.45709979368877784
+    }
+  },
+  "tolls_model": {
+    "target": "tolls_amount",
+    "features": [
+      "trip_distance",
+      "trip_duration_min",
+      "passenger_count",
+      "avg_speed_mph",
+      "pickup_hour",
+      "day_of_week",
+      "is_weekend",
+      "is_rush_hour",
+      "metadata_missing"
+    ],
+    "train_rows": 222831,
+    "test_rows": 55708,
+    "cv_metrics": {
+      "CV_MAE": 0.3960407780301246,
+      "CV_RMSE": 1.3941905726654251,
+      "CV_RMSE_std": 0.024262958251909685,
+      "CV_R2": 0.5200295034438449
+    },
+    "test_metrics": {
+      "MAE": 0.39900341712820836,
+      "RMSE": 1.3947149596819859,
+      "R2": 0.5067428775136056
+    }
+  },
+  "top_permutation_features": [
+    {
+      "feature": "log_trip_distance",
+      "importance_mean": 5.678861229842796,
+      "importance_std": 0.03409628310530125
+    },
+    {
+      "feature": "trip_distance",
+      "importance_mean": 5.125050154550506,
+      "importance_std": 0.02985245580394181
+    },
+    {
+      "feature": "trip_duration_min",
+      "importance_mean": 2.500233988590789,
+      "importance_std": 0.02059750640581607
+    }
+  ],
+  "top_ridge_coefficients": [
+    {
+      "feature": "trip_distance",
+      "coefficient": 13.528205,
+      "vif": 9.937525,
+      "absolute_coefficient": 13.528205
+    },
+    {
+      "feature": "trip_duration_min",
+      "coefficient": 3.0367,
+      "vif": 10.26936,
+      "absolute_coefficient": 3.0367
+    },
+    {
+      "feature": "log_trip_distance",
+      "coefficient": -0.743801,
+      "vif": 13.56295,
+      "absolute_coefficient": 0.743801
+    },
+    {
+      "feature": "passenger_count",
+      "coefficient": 0.213533,
+      "vif": 1.03008,
+      "absolute_coefficient": 0.213533
+    },
+    {
+      "feature": "is_weekend",
+      "coefficient": -0.15833,
+      "vif": 2.456658,
+      "absolute_coefficient": 0.15833
+    }
+  ]
+}
